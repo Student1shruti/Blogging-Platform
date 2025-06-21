@@ -365,7 +365,7 @@ const CommunityGuidelines: React.FC = () => {
               <strong>Email:</strong> <a href="mailto:13579shrutigupta@gmail.com" className="text-indigo-600 hover:underline">13579shrutigupta@gmail.com</a>
             </p>
             <p className="text-gray-700 mt-2">
-              <strong>GitHub:</strong> <a href="https://github.com/Student1shruti" target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:underline">Student1shruti</a>
+              <strong>GitHub:</strong> <a href="https://github.com/Student1shruti" target=\"_blank" rel="noopener noreferrer\" className="text-indigo-600 hover:underline">Student1shruti</a>
             </p>
           </div>
         </div>
