@@ -4,6 +4,8 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import Header from './components/Layout/Header';
 import Footer from './components/Layout/Footer';
 import Home from './pages/Home';
+import About from './pages/About';
+import Contact from './pages/Contact';
 import Categories from './pages/Categories';
 import PostDetail from './pages/PostDetail';
 import CreatePost from './pages/CreatePost';
@@ -11,6 +13,10 @@ import Login from './pages/Auth/Login';
 import Register from './pages/Auth/Register';
 import Profile from './pages/Profile';
 import AdminDashboard from './pages/Admin/AdminDashboard';
+import PrivacyPolicy from './pages/Legal/PrivacyPolicy';
+import TermsOfService from './pages/Legal/TermsOfService';
+import CookiePolicy from './pages/Legal/CookiePolicy';
+import CommunityGuidelines from './pages/Legal/CommunityGuidelines';
 
 // Protected Route Component
 const ProtectedRoute: React.FC<{ children: React.ReactNode; adminOnly?: boolean }> = ({ 
@@ -48,9 +54,17 @@ const AppContent: React.FC = () => {
       <main className="flex-1">
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
           <Route path="/categories" element={<Categories />} />
           <Route path="/post/:id" element={<PostDetail />} />
           <Route path="/profile/:id?" element={<Profile />} />
+          
+          {/* Legal Pages */}
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/terms" element={<TermsOfService />} />
+          <Route path="/cookies" element={<CookiePolicy />} />
+          <Route path="/guidelines" element={<CommunityGuidelines />} />
           
           {/* Auth Routes */}
           <Route path="/login" element={

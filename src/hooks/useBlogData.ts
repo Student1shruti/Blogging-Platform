@@ -223,6 +223,10 @@ export const useBlogData = () => {
     const updatedPosts = [...posts, newPost];
     setPosts(updatedPosts);
     localStorage.setItem(STORAGE_KEYS.POSTS, JSON.stringify(updatedPosts));
+    
+    // Trigger a custom event to notify other components about new posts
+    window.dispatchEvent(new CustomEvent('newPostAdded', { detail: newPost }));
+    
     return newPost;
   };
 

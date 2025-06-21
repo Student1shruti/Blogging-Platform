@@ -1,6 +1,6 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Heart, MessageCircle, Eye, Calendar, User, TrendingUp, Filter } from 'lucide-react';
+import { Heart, MessageCircle, Eye, Calendar, User, TrendingUp, Filter, Bell } from 'lucide-react';
 import { useBlogData } from '../hooks/useBlogData';
 import { useAuth } from '../context/AuthContext';
 import LoadingSpinner from '../components/UI/LoadingSpinner';
@@ -10,6 +10,7 @@ const Home: React.FC = () => {
   const { user } = useAuth();
   const [sortBy, setSortBy] = useState<'latest' | 'popular' | 'trending'>('latest');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [newPostNotification, setNewPostNotification] = useState<string | null>(null);
 
   const categories = useMemo(() => {
     const cats = ['all', ...new Set(posts.map(post => post.category))];
@@ -35,6 +36,20 @@ const Home: React.FC = () => {
         );
     }
   }, [posts, sortBy, selectedCategory]);
+
+  // Listen for new posts
+  useEffect(() => {
+    const handleNewPost = (event: CustomEvent) => {
+      const newPost = event.detail;
+      if (user && newPost.author.id !== user.id) {
+        setNewPostNotification(`New post: "${newPost.title}" by ${newPost.author.fullName}`);
+        setTimeout(() => setNewPostNotification(null), 5000);
+      }
+    };
+
+    window.addEventListener('newPostAdded', handleNewPost as EventListener);
+    return () => window.removeEventListener('newPostAdded', handleNewPost as EventListener);
+  }, [user]);
 
   const handleLike = (postId: string) => {
     if (user) {
@@ -66,6 +81,20 @@ const Home: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* New Post Notification */}
+      {newPostNotification && (
+        <div className="fixed top-20 right-4 z-50 bg-indigo-600 text-white px-6 py-3 rounded-lg shadow-lg flex items-center animate-slide-in">
+          <Bell className="h-4 w-4 mr-2" />
+          <span className="text-sm">{newPostNotification}</span>
+          <button
+            onClick={() => setNewPostNotification(null)}
+            className="ml-3 text-white hover:text-gray-200"
+          >
+            ×
+          </button>
+        </div>
+      )}
+
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-800 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -231,6 +260,22 @@ const Home: React.FC = () => {
           </div>
         )}
       </div>
+
+      <style jsx>{`
+        @keyframes slide-in {
+          from {
+            transform: translateX(100%);
+            opacity: 0;
+          }
+          to {
+            transform: translateX(0);
+            opacity: 1;
+          }
+        }
+        .animate-slide-in {
+          animation: slide-in 0.3s ease-out;
+        }
+      `}</style>
     </div>
   );
 };
